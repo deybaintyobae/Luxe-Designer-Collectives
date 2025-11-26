@@ -1991,11 +1991,11 @@
                 document.getElementById('step2Label').textContent = 'Billing';
                 document.getElementById('step3Label').textContent = 'Shipping';
             } else {
-                // For Cash on Delivery: go to Shipping info (step 3)
+                // For Cash on Delivery: go to Shipping info (skip billing - step 2)
                 document.querySelector('.step[data-step="1"]').classList.add('completed');
                 document.querySelector('.step[data-step="1"]').classList.remove('active');
                 currentStep = 3;
-                showStep(3);
+                showStep(3);  // Show step3 which is Shipping Information
                 document.querySelector('.step[data-step="2"]').classList.add('active');
                 document.getElementById('step2Label').textContent = 'Shipping';
                 document.getElementById('step3Label').textContent = 'Review';
@@ -2066,12 +2066,14 @@
          * @param {number} step - The step number to move to
          */
         function prevStep(step) {
-            const currentStepNum = currentStep <= 2 ? currentStep : (currentStep === 3 ? 2 : 3);
-            document.querySelector(`.step[data-step="${currentStepNum}"]`).classList.remove('active', 'completed');
+            // Get current progress step (1-3)
+            const currentProgressStep = currentStep === 1 ? 1 : (currentStep === 2 ? 2 : (currentStep === 3 ? 2 : 3));
+            const nextProgressStep = step === 1 ? 1 : (step === 2 ? 2 : (step === 4 ? 3 : step));
+            
+            document.querySelector(`.step[data-step="${currentProgressStep}"]`).classList.remove('active', 'completed');
             currentStep = step;
             showStep(step);
-            const nextStepNum = step <= 2 ? step : (step === 3 ? 2 : 3);
-            document.querySelector(`.step[data-step="${nextStepNum}"]`).classList.add('active');
+            document.querySelector(`.step[data-step="${nextProgressStep}"]`).classList.add('active');
         }
         
         /**
