@@ -1234,149 +1234,153 @@
         </div>
     </div>
 
-    <!-- ============================================
-         CHECKOUT MODAL (MOCK PAYMENT WALL)
+    <!-- Removed redesigned checkout modal - replaced with old-style 4-step checkout -->
+
+<!-- ============================================
+         CHECKOUT MODAL (RESTORED OLD 4-STEP)
+         Steps: 1=Payment, 2=Billing (card), 3=Shipping, 4=Review
          ============================================ -->
-    <div id="checkoutModal" class="checkout-modal">
-        <div class="checkout-container">
-            <div class="checkout-header">
-                <h2>Checkout</h2>
-                <button class="checkout-close" onclick="closeCheckout()">×</button>
+<div id="checkoutModal" class="checkout-modal" style="display:none;">
+    <div class="checkout-container" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+        <div class="checkout-header">
+            <h2 id="checkoutTitle">Checkout</h2>
+            <button class="checkout-close" id="checkoutCloseBtn" aria-label="Close checkout">×</button>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="checkout-steps" style="padding:1rem 2rem;display:flex;gap:1rem;align-items:center;">
+            <div class="step active" data-step="1" id="progressStep1">
+                <div class="step-number">1</div>
+                <div class="step-label">Payment</div>
             </div>
-            
-            <!-- Progress Steps -->
-            <div class="checkout-steps">
-                <div class="step active" data-step="1">
-                    <div class="step-number">1</div>
-                    <div class="step-label">Payment Method</div>
+            <div class="step" data-step="2" id="progressStep2">
+                <div class="step-number">2</div>
+                <div class="step-label" id="step2Label">Billing</div>
+            </div>
+            <div class="step" data-step="3" id="progressStep3">
+                <div class="step-number">3</div>
+                <div class="step-label" id="step3Label">Shipping</div>
+            </div>
+            <div class="step" data-step="4" id="progressStep4">
+                <div class="step-number">4</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <div class="checkout-content" style="padding:1.5rem 2rem;">
+            <!-- Step 1: Payment Method -->
+            <div id="step1" class="checkout-step-content">
+                <h3>Choose Payment Method</h3>
+                <p style="color:#666;margin-bottom:1rem;">Select how you'd like to pay for your order.</p>
+                <div class="payment-methods" style="display:flex;flex-direction:column;gap:0.75rem;max-width:420px;">
+                    <label class="payment-method active" style="padding:0.75rem;border-radius:8px;display:flex;align-items:center;gap:0.75rem;">
+                        <input type="radio" name="paymentMethod" value="card" checked>
+                        <div style="font-weight:600;">Card Payment</div>
+                        <div style="color:#666;font-size:0.9rem;margin-left:auto;">Credit or Debit</div>
+                    </label>
+                    <label class="payment-method" style="padding:0.75rem;border-radius:8px;display:flex;align-items:center;gap:0.75rem;">
+                        <input type="radio" name="paymentMethod" value="cod">
+                        <div style="font-weight:600;">Cash on Delivery</div>
+                        <div style="color:#666;font-size:0.9rem;margin-left:auto;">Pay on delivery</div>
+                    </label>
                 </div>
-                <div class="step" data-step="2">
-                    <div class="step-number">2</div>
-                    <div class="step-label" id="step2Label">Shipping</div>
-                </div>
-                <div class="step" data-step="3">
-                    <div class="step-number">3</div>
-                    <div class="step-label" id="step3Label">Review</div>
+                <div style="margin-top:1.5rem;display:flex;gap:1rem;">
+                    <button class="btn-primary" style="flex:1;" id="paymentContinueBtn">Continue</button>
+                    <button class="btn-secondary" style="flex:1;" onclick="closeCheckout()">Cancel</button>
                 </div>
             </div>
-            
-            <div class="checkout-content">
-                <!-- Step 1: Payment Method Selection -->
-                <div id="step1" class="checkout-step-content">
-                    <h3>Select Payment Method</h3>
-                    <div class="payment-methods">
-                        <label class="payment-method active">
-                            <input type="radio" name="paymentMethod" value="card" checked onchange="handlePaymentMethodChange('card')">
-                            <div class="payment-method-content">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                    <line x1="1" y1="10" x2="23" y2="10"></line>
-                                </svg>
-                                <span>Card Payment</span>
-                            </div>
-                        </label>
-                        <label class="payment-method">
-                            <input type="radio" name="paymentMethod" value="cod" onchange="handlePaymentMethodChange('cod')">
-                            <div class="payment-method-content">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"></path>
-                                </svg>
-                                <span>Cash on Delivery</span>
-                            </div>
-                        </label>
-                    </div>
-                    <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="handlePaymentMethodSubmit()">Continue</button>
+
+            <!-- Step 2: Billing (Card details) -->
+            <div id="step2" class="checkout-step-content" style="display:none;">
+                <h3>Billing - Card Information</h3>
+                <p style="color:#666;margin-bottom:1rem;">Enter your card details securely.</p>
+
+                <div class="form-group">
+                    <label class="form-label">Card Number *</label>
+                    <input type="text" id="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
                 </div>
-                
-                <!-- Step 2: Billing Information (only for card payment) -->
-                <div id="step2" class="checkout-step-content" style="display: none;">
-                    <h3 id="step2Title">Billing Information</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Card Number *</label>
-                            <input type="text" id="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Expiry Date *</label>
-                            <input type="text" id="expiry" class="form-input" placeholder="MM/YY" maxlength="5">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">CVV *</label>
-                            <input type="text" id="cvv" class="form-input" placeholder="123" maxlength="4">
-                        </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Expiry (MM/YY) *</label>
+                        <input type="text" id="expiry" class="form-input" placeholder="MM/YY" maxlength="5">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Cardholder Name *</label>
-                        <input type="text" id="cardName" class="form-input" placeholder="Name on card">
-                    </div>
-                    <div class="btn-group" style="margin-top: 1rem;">
-                        <button class="btn-secondary" style="flex: 1;" onclick="prevStep(1)">Back</button>
-                        <button class="btn-primary" style="flex: 2;" onclick="nextStep(3)">Continue to Shipping</button>
+                        <label class="form-label">CVV *</label>
+                        <input type="text" id="cvv" class="form-input" placeholder="123" maxlength="4">
                     </div>
                 </div>
-                
-                <!-- Step 3: Shipping Information -->
-                <div id="step3" class="checkout-step-content" style="display: none;">
-                    <h3>Shipping Information</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">First Name *</label>
-                            <input type="text" id="firstName" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Last Name *</label>
-                            <input type="text" id="lastName" class="form-input" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Email *</label>
-                        <input type="email" id="email" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Phone *</label>
-                        <input type="tel" id="phone" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Address *</label>
-                        <input type="text" id="address" class="form-input" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">City *</label>
-                            <input type="text" id="city" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Postal Code *</label>
-                            <input type="text" id="postal" class="form-input" required>
-                        </div>
-                    </div>
-                    <div class="btn-group" style="margin-top: 1rem;" id="step3Buttons">
-                        <button class="btn-secondary" style="flex: 1;" onclick="prevStep(2)">Back</button>
-                        <button class="btn-primary" style="flex: 2;" onclick="nextStep(4)">Continue to Review</button>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Name on Card *</label>
+                    <input type="text" id="cardName" class="form-input" placeholder="Cardholder name">
                 </div>
-                
-                <!-- Step 4: Order Review -->
-                <div id="step4" class="checkout-step-content" style="display: none;">
-                    <h3>Order Summary</h3>
-                    <div id="orderSummary" class="order-summary"></div>
-                    <div class="order-total">
-                        <span>Total:</span>
-                        <span id="finalTotal">$0</span>
+
+                <div style="margin-top:1.5rem;display:flex;gap:1rem;">
+                    <button class="btn-secondary" style="flex:1;" onclick="prevStep(1)">Back</button>
+                    <button class="btn-primary" style="flex:1;" id="billingContinueBtn">Continue</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Shipping -->
+            <div id="step3" class="checkout-step-content" style="display:none;">
+                <h3>Shipping Information</h3>
+                <p style="color:#666;margin-bottom:1rem;">Where should we deliver your order?</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name *</label>
+                        <input type="text" id="firstName" class="form-input" required>
                     </div>
-                    <div class="btn-group" style="margin-top: 1rem;" id="step4Buttons">
-                        <button class="btn-secondary" style="flex: 1;" id="backBtnStep4" onclick="prevStep(3)">Back</button>
-                        <button class="btn-primary btn-place-order" style="flex: 2;" onclick="placeOrder()">Place Order</button>
+                    <div class="form-group">
+                        <label class="form-label">Last Name *</label>
+                        <input type="text" id="lastName" class="form-input" required>
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" id="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone *</label>
+                    <input type="tel" id="phone" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address *</label>
+                    <input type="text" id="address" class="form-input" required placeholder="123 Main St">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">City *</label>
+                        <input type="text" id="city" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Postal Code *</label>
+                        <input type="text" id="postal" class="form-input" required>
+                    </div>
+                </div>
+
+                <div style="margin-top:1.5rem;display:flex;gap:1rem;">
+                    <button class="btn-secondary" style="flex:1;" onclick="prevStep(2)">Back</button>
+                    <button class="btn-primary" style="flex:1;" id="shippingContinueBtn">Continue</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Review -->
+            <div id="step4" class="checkout-step-content" style="display:none;">
+                <h3>Review Your Order</h3>
+                <div id="orderSummary" class="order-summary" style="margin-bottom:1rem;"></div>
+                <div class="order-total" style="margin-bottom:1rem;">
+                    <span>Total:</span><span id="finalTotal">$0</span>
+                </div>
+                <div style="display:flex;gap:1rem;">
+                    <button class="btn-secondary" style="flex:1;" onclick="prevStep(3)">Back</button>
+                    <button class="btn-primary" style="flex:1;" id="placeOrderBtn">Place Order</button>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- ============================================
+</div>
+<!-- ============================================ -->\n<!-- ============================================
          HERO SECTION
          ============================================ -->
     <section class="hero" id="hero">
@@ -2393,6 +2397,215 @@
                 }, 300);
             }, 3000);
         }
-    </script>
+    
+/* --- Rebuilt checkout logic for old 4-step flow --- */
+(function(){
+    // helper to show step by id step1..step4
+    function showStep(step) {
+        document.querySelectorAll('.checkout-step-content').forEach(c => c.style.display = 'none');
+        const el = document.getElementById('step' + step);
+        if (el) el.style.display = 'block';
+        // update progress classes
+        [1,2,3,4].forEach(n => {
+            const p = document.getElementById('progressStep' + n);
+            if (!p) return;
+            p.classList.remove('active','completed');
+            if (n < step) p.classList.add('completed');
+            if (n === step) p.classList.add('active');
+        });
+    }
+
+    function resetCheckout() {
+        // default payment method = card
+        const defaultRadio = document.querySelector('input[name="paymentMethod"][value="card"]');
+        if (defaultRadio) defaultRadio.checked = true;
+        // clear forms (leave cart intact)
+        ['cardNumber','expiry','cvv','cardName','firstName','lastName','email','phone','address','city','postal'].forEach(id=>{
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        checkoutData = checkoutData || {};
+        checkoutData.billing = {};
+        checkoutData.shipping = {};
+        showStep(1);
+    }
+
+    // Attach global functions used by inline onclicks
+    window.showStep = showStep;
+    window.resetCheckout = resetCheckout;
+    window.closeCheckout = function() {
+        const modal = document.getElementById('checkoutModal');
+        if (modal) modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        resetCheckout();
+    };
+    window.openCheckout = function(cartItems, total) {
+        checkoutData = checkoutData || {};
+        checkoutData.cart = cartItems || cart || [];
+        checkoutData.total = total || (cart.reduce((s,i)=>s + (i.price*i.quantity),0));
+        const modal = document.getElementById('checkoutModal');
+        if (modal) {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        // set finalTotal
+        const ft = document.getElementById('finalTotal');
+        if (ft) ft.textContent = '$' + (checkoutData.total || 0).toFixed(2);
+        showStep(1);
+    };
+
+    // step navigation helpers used elsewhere
+    window.nextStep = function(targetStep) {
+        // validate depending on current visible step
+        const current = Array.from(document.querySelectorAll('.checkout-step-content')).findIndex(c => c.style.display !== 'none') + 1;
+        // validations
+        if (current === 2) {
+            if (!validateBilling()) return;
+            // store billing
+            checkoutData.billing = {
+                cardNumber: (document.getElementById('cardNumber')||{}).value || '',
+                expiry: (document.getElementById('expiry')||{}).value || '',
+                cvv: (document.getElementById('cvv')||{}).value || '',
+                cardName: (document.getElementById('cardName')||{}).value || ''
+            };
+        }
+        if (current === 3) {
+            if (!validateShipping()) return;
+            checkoutData.shipping = {
+                firstName: (document.getElementById('firstName')||{}).value || '',
+                lastName: (document.getElementById('lastName')||{}).value || '',
+                email: (document.getElementById('email')||{}).value || '',
+                phone: (document.getElementById('phone')||{}).value || '',
+                address: (document.getElementById('address')||{}).value || '',
+                city: (document.getElementById('city')||{}).value || '',
+                postal: (document.getElementById('postal')||{}).value || ''
+            };
+        }
+        // show target
+        showStep(targetStep);
+        if (targetStep === 4) showOrderSummary();
+    };
+
+    window.prevStep = function(targetStep) {
+        showStep(targetStep);
+    };
+
+    function validateBilling() {
+        const fields = ['cardNumber','expiry','cvv','cardName'];
+        let ok = true;
+        fields.forEach(id=>{
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (!el.value.trim()) {
+                el.style.borderColor = '#ff4757';
+                ok = false;
+            } else {
+                el.style.borderColor = '#e0e0e0';
+            }
+        });
+        if (!ok) { alert('Please fill in all card details'); return false; }
+        const num = (document.getElementById('cardNumber')||{}).value.replace(/\s/g,'');
+        if (num.length < 13 || num.length > 19) { alert('Invalid card number'); (document.getElementById('cardNumber')||{}).style.borderColor='#ff4757'; return false; }
+        return true;
+    }
+    window.validateBilling = validateBilling;
+
+    function validateShipping() {
+        const fields = ['firstName','lastName','email','phone','address','city','postal'];
+        let ok = true;
+        fields.forEach(id=>{
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (!el.value.trim()) {
+                el.style.borderColor = '#ff4757';
+                ok = false;
+            } else {
+                el.style.borderColor = '#e0e0e0';
+            }
+        });
+        if (!ok) { alert('Please fill in all required fields'); return false; }
+        return true;
+    }
+    window.validateShipping = validateShipping;
+
+    function showOrderSummary() {
+        const summaryDiv = document.getElementById('orderSummary');
+        if (!summaryDiv) return;
+        let html = '<h4 style="margin-bottom:0.75rem;">Items</h4>';
+        const items = checkoutData.cart || [];
+        items.forEach(it=>{
+            html += `<div class="order-item" style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid #eaeaea;">
+                        <div><div style="font-weight:600;">${it.name}</div><div style="color:#666;font-size:0.9rem;">Qty: ${it.quantity}</div></div>
+                        <div style="font-weight:600;">$${(it.price*it.quantity).toFixed(2)}</div>
+                    </div>`;
+        });
+        html += `<div style="margin-top:1rem;"><strong>Shipping To</strong><div style="color:#666;margin-top:0.5rem;">${(checkoutData.shipping.firstName||'')+' '+(checkoutData.shipping.lastName||'')}<br>${checkoutData.shipping.address||''}<br>${checkoutData.shipping.city||''} ${checkoutData.shipping.postal||''}</div></div>`;
+        summaryDiv.innerHTML = html;
+        const ft = document.getElementById('finalTotal');
+        if (ft) ft.textContent = '$' + ((checkoutData.total||0).toFixed(2));
+    }
+    window.showOrderSummary = showOrderSummary;
+
+    // handle selection and continue from step1
+    function handlePaymentMethodSubmit() {
+        const selected = document.querySelector('input[name="paymentMethod"]:checked');
+        const val = selected ? selected.value : null;
+        checkoutData.paymentMethod = val || 'card';
+        if (checkoutData.paymentMethod === 'card') {
+            showStep(2);
+        } else {
+            showStep(3); // skip billing
+        }
+    }
+    window.handlePaymentMethodSubmit = handlePaymentMethodSubmit;
+
+    // Wire UI buttons after DOM ready
+    document.addEventListener('DOMContentLoaded', function(){
+        const paymentContinueBtn = document.getElementById('paymentContinueBtn');
+        if (paymentContinueBtn) paymentContinueBtn.addEventListener('click', handlePaymentMethodSubmit);
+
+        const billingContinueBtn = document.getElementById('billingContinueBtn');
+        if (billingContinueBtn) billingContinueBtn.addEventListener('click', function(){ nextStep(3); });
+
+        const shippingContinueBtn = document.getElementById('shippingContinueBtn');
+        if (shippingContinueBtn) shippingContinueBtn.addEventListener('click', function(){ nextStep(4); });
+
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        if (placeOrderBtn) placeOrderBtn.addEventListener('click', function(){
+            alert('Order placed! Thank you.');
+            // clear cart and close
+            cart = [];
+            saveCart && saveCart();
+            updateCartUI && updateCartUI();
+            closeCheckout();
+        });
+
+        const checkoutCloseBtn = document.getElementById('checkoutCloseBtn');
+        if (checkoutCloseBtn) checkoutCloseBtn.addEventListener('click', closeCheckout);
+
+        // wire the site-wide Checkout button (cart sidebar)
+        const sidebarCheckout = document.getElementById('checkoutBtn');
+        if (sidebarCheckout) {
+            sidebarCheckout.addEventListener('click', function(){
+                // compute total
+                const total = cart.reduce((s,i)=>s + (i.price * i.quantity),0);
+                openCheckout(cart, total);
+            });
+        }
+
+        // ensure payment-method labels toggle active class
+        document.querySelectorAll('.payment-method').forEach(m => {
+            m.addEventListener('click', function(){
+                document.querySelectorAll('.payment-method').forEach(x=>x.classList.remove('active'));
+                this.classList.add('active');
+                const input = this.querySelector('input[type="radio"]');
+                if (input) input.checked = true;
+            });
+        });
+    });
+})();
+/* --- End rebuilt checkout logic --- */
+
+</script>
 </body>
 </html>
